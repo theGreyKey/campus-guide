@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(py:*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:/Users/cheny/Desktop/大创/fintech-guide/start.ps1\")"
+    ]
+  }
+}

@@ -16,7 +16,7 @@ from src.pages import course_page, job_page, skill_page, cert_page, search_page,
 # 页面配置
 st.set_page_config(
     page_title="湖南大学金融科技导航系统",
-    page_icon="📘",
+    page_icon=None,
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -30,99 +30,152 @@ render_header()
 # 初始化session
 init_session()
 
-# 导航栏样式 - 浅蓝色背景
+# 导航栏样式
 st.markdown("""
 <style>
-/* 隐藏默认侧边栏 */
 [data-testid="stSidebar"] {
     display: none !important;
 }
 [data-testid="stSidebarCollapsedControl"] {
     display: none !important;
 }
-/* 主内容区域全宽 */
-.main .block-container {
-    padding-top: 1rem;
-    max-width: 100%;
-}
 
-/* 顶部导航栏容器样式 - 浅蓝色背景 */
 .top-nav {
-    background: linear-gradient(135deg, #5BA0C8, #4A90B8) !important;
-    border-radius: 50px;
-    padding: 10px 20px;
-    margin-bottom: 25px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0.6rem;
+    z-index: 20;
+    padding: 0.8rem;
+    margin-bottom: 1.2rem;
+    border: 1px solid var(--line) !important;
+    border-radius: var(--radius-lg) !important;
+    background: linear-gradient(180deg, rgba(12, 23, 39, 0.9) 0%, rgba(8, 16, 28, 0.92) 100%) !important;
+    box-shadow: var(--shadow-soft) !important;
+    backdrop-filter: blur(18px);
 }
 
-/* 导航栏内所有按钮的容器 */
+.top-nav-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.top-nav-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.15rem 0.2rem 0;
+}
+
+.top-nav-title {
+    color: var(--ink) !important;
+    font-size: 0.96rem;
+    font-weight: 680;
+}
+
+.top-nav-caption {
+    color: var(--muted) !important;
+    font-size: 0.82rem;
+    margin-top: 0.18rem;
+}
+
+.top-nav-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.42rem 0.72rem;
+    border-radius: 999px;
+    background: rgba(62, 139, 255, 0.12);
+    border: 1px solid rgba(62, 139, 255, 0.2);
+    color: #A9CAFF !important;
+    font-size: 0.76rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
 .top-nav .stButton {
     display: inline-block;
 }
 
-/* 导航按钮样式 */
 .top-nav .stButton button {
-    transition: all 0.3s ease !important;
-    border-radius: 40px !important;
-    font-weight: 600 !important;
-    font-size: 15px !important;
-    padding: 8px 20px !important;
-    border: none !important;
+    transition: all 160ms var(--ease-out) !important;
+    border-radius: 14px !important;
+    font-weight: 650 !important;
+    font-size: 0.92rem !important;
+    padding: 0.72rem 0.7rem !important;
+    border: 1px solid transparent !important;
     cursor: pointer !important;
+    min-height: 48px !important;
 }
 
-/* primary 按钮样式（激活状态）- 白色背景深色文字 */
 .top-nav .stButton button[kind="primary"] {
-    background: #FFFFFF !important;
-    color: #2A5C8A !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    background: linear-gradient(135deg, rgba(62, 139, 255, 0.2) 0%, rgba(62, 139, 255, 0.12) 100%) !important;
+    color: #F7FBFF !important;
+    border-color: rgba(62, 139, 255, 0.32) !important;
+    box-shadow: inset 0 0 0 1px rgba(62, 139, 255, 0.12), 0 14px 28px rgba(18, 42, 82, 0.24) !important;
 }
 
 .top-nav .stButton button[kind="primary"]:hover {
-    background: #E8EEF5 !important;
-    color: #2A5C8A !important;
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, rgba(62, 139, 255, 0.26) 0%, rgba(62, 139, 255, 0.16) 100%) !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
 }
 
-/* secondary 按钮样式（未激活状态）- 使用 C0D9E8 */
 .top-nav .stButton button[kind="secondary"] {
-    background: #C0D9E8 !important;
-    color: #1E2A3A !important;
+    background: rgba(255,255,255,0.02) !important;
+    color: var(--muted) !important;
+    border-color: rgba(148, 175, 206, 0.12) !important;
 }
 
 .top-nav .stButton button[kind="secondary"]:hover {
-    background: #A8C8D8 !important;
-    color: #1E2A3A !important;
-    transform: translateY(-2px);
+    background: rgba(62, 139, 255, 0.1) !important;
+    color: var(--ink) !important;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .top-nav-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
 
 # 导航栏容器
-st.markdown('<div class="top-nav">', unsafe_allow_html=True)
+st.markdown('<div class="top-nav"><div class="top-nav-shell">', unsafe_allow_html=True)
+st.markdown(f"""
+<div class="top-nav-meta">
+    <div>
+        <div class="top-nav-title">Navigation workspace</div>
+        <div class="top-nav-caption">按模块切换课程、技能、证书、职业、路线与搜索视图。</div>
+    </div>
+    <div class="top-nav-status">Current · {st.session_state.nav_selected}</div>
+</div>
+""", unsafe_allow_html=True)
 
 # 创建导航栏的列布局
 nav_cols = st.columns(6)
 
 # 导航栏选项
 nav_options = [
-    {"name": "课程地图", "icon": "📚", "page_key": "course"},
-    {"name": "技能图谱", "icon": "🧠", "page_key": "skill"},
-    {"name": "证书导航", "icon": "🎓", "page_key": "cert"},
-    {"name": "职业生态", "icon": "💼", "page_key": "job"},
-    {"name": "成长路线", "icon": "🌱", "page_key": "roadmap"},
-    {"name": "智能搜索", "icon": "🔍", "page_key": "search"}
+    {"name": "课程地图", "page_key": "course"},
+    {"name": "技能图谱", "page_key": "skill"},
+    {"name": "证书导航", "page_key": "cert"},
+    {"name": "职业生态", "page_key": "job"},
+    {"name": "成长路线", "page_key": "roadmap"},
+    {"name": "智能搜索", "page_key": "search"}
 ]
 
 for idx, option in enumerate(nav_options):
     with nav_cols[idx]:
         is_active = st.session_state.nav_selected == option["name"]
-        button_label = f"{option['icon']} {option['name']}"
-        
+        button_label = option["name"]
+
         if st.button(
-            button_label, 
-            key=f"top_nav_{option['page_key']}", 
-            use_container_width=True, 
+            button_label,
+            key=f"top_nav_{option['page_key']}",
+            use_container_width=True,
             type="primary" if is_active else "secondary"
         ):
             if st.session_state.nav_selected != option["name"]:
@@ -131,8 +184,7 @@ for idx, option in enumerate(nav_options):
                 st.session_state.selected_cert = None
                 st.rerun()
 
-st.markdown('</div>', unsafe_allow_html=True)
-st.markdown("---")
+st.markdown('</div></div>', unsafe_allow_html=True)
 
 # 获取 URL 参数中的页面
 try:
