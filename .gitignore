@@ -19,8 +19,8 @@ dist/
 # IDE/editor metadata
 vscode/
 idea/
-devcontainer/
-claude/
+.devcontainer/
+.claude/
 AGENTS.md
 
 # OS files

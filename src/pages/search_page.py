@@ -38,6 +38,15 @@ def render():
     </div>
     """, unsafe_allow_html=True)
 
+    st.markdown("""
+    <div class="search-console content-fade">
+        <div class="section-header">
+            <div class="section-kicker">Search console</div>
+            <div class="section-title">输入偏好并快速补充搜索信号</div>
+            <p class="section-caption">搜索框、快捷标签与执行按钮组成统一控制台，输入越具体，推荐越接近你的真实意图。</p>
+        </div>
+    """, unsafe_allow_html=True)
+
     user_input = st.text_area(
         "描述你的偏好",
         value=st.session_state.get("search_input", ""),
@@ -45,12 +54,15 @@ def render():
         height=120,
     )
 
+    signal_label = "Query signal ready" if user_input.strip() else "Waiting for preference signal"
+    signal_count = len(user_input.strip())
+    st.markdown(f'<div class="query-signal">{signal_label} · {signal_count} chars</div>', unsafe_allow_html=True)
+
     st.markdown("""
-    <div class="section-shell">
         <div class="section-header">
             <div class="section-kicker">Quick prompts</div>
             <div class="section-title">快捷标签补充区</div>
-            <p class="section-caption">标签样式只在该区域内生效，用来快速拼接搜索语义，不污染其他按钮。</p>
+            <p class="section-caption">点击标签会拼接到输入框，适合快速补充能力、行业与工作方式偏好。</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -66,12 +78,13 @@ def render():
                     current = st.session_state.get("search_input", user_input or "").strip()
                     st.session_state.search_input = f"{current} {tag}".strip()
                     st.rerun()
-    st.markdown('</div></div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     if user_input != st.session_state.get("search_input", ""):
         st.session_state.search_input = user_input
 
     search_btn = st.button("开始智能搜索", use_container_width=True, type="primary")
+    st.markdown('</div>', unsafe_allow_html=True)
 
     if search_btn and user_input:
         keywords = {
@@ -109,6 +122,7 @@ def render():
         cert_count = len(matched_certs)
         emphasis = "偏技术/分析" if any(k in input_lower for k in ["数学", "编程", "数据", "量化", "ai"]) else "偏综合探索"
 
+        st.markdown('<div class="results-board content-fade">', unsafe_allow_html=True)
         st.markdown(f"""
         <div class="metric-strip">
             <div class="metric-item">
@@ -266,6 +280,7 @@ def render():
             </div>
         """, unsafe_allow_html=True)
         st.info(advice)
+        st.markdown('</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
     elif search_btn:

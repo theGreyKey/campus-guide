@@ -19,6 +19,10 @@ def load_css():
         --surface-soft: rgba(17, 31, 48, 0.72);
         --surface-tint: rgba(24, 42, 66, 0.82);
         --surface-glass: rgba(8, 18, 31, 0.72);
+        --surface-elevated: rgba(14, 27, 46, 0.94);
+        --surface-elevated-strong: rgba(18, 34, 56, 0.96);
+        --surface-console: rgba(7, 17, 31, 0.82);
+        --surface-glass-strong: rgba(10, 22, 38, 0.84);
         --ink: #F4F8FC;
         --ink-soft: #D7E2EE;
         --muted: #95A8BE;
@@ -34,18 +38,40 @@ def load_css():
         --danger: #E37C86;
         --shadow: 0 24px 60px rgba(0, 0, 0, 0.36);
         --shadow-soft: 0 14px 34px rgba(0, 0, 0, 0.24);
+        --shadow-hover: 0 28px 70px rgba(0, 0, 0, 0.42), 0 0 42px rgba(62, 139, 255, 0.08);
+        --shadow-focus: 0 0 0 3px rgba(62, 139, 255, 0.18), 0 14px 32px rgba(0, 0, 0, 0.26);
+        --glow-primary: 0 0 34px rgba(62, 139, 255, 0.26);
+        --glow-accent: 0 0 30px rgba(125, 226, 209, 0.2);
         --radius-xl: 28px;
         --radius-lg: 22px;
         --radius-md: 18px;
         --radius-sm: 12px;
         --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        --ease-emphasized: cubic-bezier(0.2, 0.8, 0.2, 1);
+        --dur-fast: 140ms;
+        --dur-med: 220ms;
+        --dur-slow: 420ms;
     }
 
     .stApp {
         background:
-            radial-gradient(circle at top left, rgba(62, 139, 255, 0.16), transparent 34%),
-            radial-gradient(circle at top right, rgba(125, 226, 209, 0.12), transparent 28%),
+            radial-gradient(circle at top left, rgba(62, 139, 255, 0.18), transparent 34%),
+            radial-gradient(circle at 82% 8%, rgba(125, 226, 209, 0.13), transparent 26%),
+            radial-gradient(circle at 50% 100%, rgba(224, 181, 106, 0.06), transparent 32%),
             linear-gradient(180deg, #091423 0%, #07111F 42%, #050D17 100%);
+    }
+
+    .stApp::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background-image:
+            linear-gradient(rgba(148, 175, 206, 0.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(148, 175, 206, 0.035) 1px, transparent 1px);
+        background-size: 46px 46px;
+        mask-image: linear-gradient(180deg, rgba(0,0,0,0.72), rgba(0,0,0,0.08));
     }
 
     .stApp, .main, .block-container {
@@ -97,7 +123,11 @@ def load_css():
         border: 1px solid var(--line) !important;
         border-radius: 14px !important;
         box-shadow: none !important;
-        transition: border-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out), background 160ms var(--ease-out);
+        transition:
+            border-color var(--dur-fast) var(--ease-out),
+            box-shadow var(--dur-fast) var(--ease-out),
+            background var(--dur-fast) var(--ease-out),
+            transform var(--dur-fast) var(--ease-out);
     }
 
     .stSelectbox div[data-baseweb="select"] > div,
@@ -113,9 +143,9 @@ def load_css():
     .stNumberInput input:focus,
     .stSelectbox div[data-baseweb="select"]:focus-within,
     .stMultiSelect div[data-baseweb="select"]:focus-within {
-        border-color: rgba(62, 139, 255, 0.7) !important;
-        box-shadow: 0 0 0 3px rgba(62, 139, 255, 0.16) !important;
-        background: rgba(10, 20, 34, 0.94) !important;
+        border-color: rgba(62, 139, 255, 0.72) !important;
+        box-shadow: var(--shadow-focus) !important;
+        background: rgba(10, 20, 34, 0.96) !important;
     }
 
     .stTextInput input::placeholder,
@@ -128,10 +158,10 @@ def load_css():
     }
 
     div[data-baseweb="popover"] ul {
-        background: rgba(9, 18, 31, 0.98) !important;
-        border: 1px solid var(--line) !important;
-        border-radius: 14px !important;
-        box-shadow: var(--shadow) !important;
+        background: var(--surface-elevated-strong) !important;
+        border: 1px solid var(--line-strong) !important;
+        border-radius: 16px !important;
+        box-shadow: var(--shadow-hover) !important;
     }
 
     div[data-baseweb="popover"] li {
@@ -141,7 +171,8 @@ def load_css():
     }
 
     div[data-baseweb="popover"] li:hover {
-        background: rgba(62, 139, 255, 0.12) !important;
+        background: rgba(62, 139, 255, 0.14) !important;
+        color: #F7FBFF !important;
     }
 
     div[data-baseweb="popover"] li[aria-selected="true"] {
@@ -307,6 +338,11 @@ def load_css():
 
     .page-hero,
     .section-shell,
+    .interactive-surface,
+    .form-panel,
+    .search-console,
+    .results-board,
+    .roadmap-board,
     .panel-card,
     .insight-card,
     .timeline-card,
@@ -328,10 +364,90 @@ def load_css():
     .result-card,
     .resource-card,
     .detail-list {
+        position: relative;
         background: linear-gradient(180deg, rgba(13, 25, 42, 0.96) 0%, rgba(9, 18, 31, 0.96) 100%) !important;
         border: 1px solid var(--line) !important;
         border-radius: var(--radius-lg) !important;
         box-shadow: var(--shadow-soft) !important;
+    }
+
+    .interactive-surface,
+    .search-console,
+    .form-panel,
+    .results-board,
+    .roadmap-board {
+        overflow: hidden;
+        background:
+            linear-gradient(180deg, rgba(18, 34, 56, 0.9), rgba(8, 18, 31, 0.94)),
+            radial-gradient(circle at 12% 0%, rgba(62, 139, 255, 0.14), transparent 28%) !important;
+        border-color: rgba(148, 175, 206, 0.24) !important;
+        backdrop-filter: blur(18px) saturate(130%);
+    }
+
+    .interactive-surface::before,
+    .search-console::before,
+    .form-panel::before,
+    .results-board::before,
+    .roadmap-board::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(62, 139, 255, 0.82), rgba(125, 226, 209, 0.42), transparent);
+        pointer-events: none;
+    }
+
+    .content-fade {
+        animation: contentFade var(--dur-slow) var(--ease-emphasized) both;
+    }
+
+    @keyframes contentFade {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .search-console,
+    .results-board,
+    .roadmap-board {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .form-panel {
+        margin-top: 0.85rem;
+    }
+
+    .query-signal {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        width: fit-content;
+        padding: 0.42rem 0.72rem;
+        border-radius: 999px;
+        background: rgba(125, 226, 209, 0.1);
+        border: 1px solid rgba(125, 226, 209, 0.22);
+        color: #B9FFF4 !important;
+        font-size: 0.78rem;
+        font-weight: 700;
+    }
+
+    .preference-grid,
+    .choice-matrix {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 0.6rem;
+        padding: 0.75rem;
+        border-radius: var(--radius-md);
+        border: 1px solid rgba(148, 175, 206, 0.14);
+        background: rgba(255, 255, 255, 0.025);
+    }
+
+    .roadmap-summary {
+        padding: 1rem 1.08rem;
+        border-radius: var(--radius-md);
+        border: 1px solid rgba(62, 139, 255, 0.24);
+        background: linear-gradient(135deg, rgba(62, 139, 255, 0.14), rgba(125, 226, 209, 0.06));
     }
 
     .page-hero {
@@ -359,6 +475,11 @@ def load_css():
     }
 
     .section-shell,
+    .interactive-surface,
+    .form-panel,
+    .search-console,
+    .results-board,
+    .roadmap-board,
     .panel-card,
     .insight-card,
     .timeline-card,
@@ -485,7 +606,7 @@ def load_css():
         padding: 1rem 1.05rem;
         text-align: left;
         box-shadow: var(--shadow-soft) !important;
-        transition: transform 160ms var(--ease-out), border-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+        transition: transform var(--dur-med) var(--ease-emphasized), border-color var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out);
     }
 
     .metric-item::before,
@@ -500,6 +621,7 @@ def load_css():
 
     .metric-item:hover,
     [data-testid="stMetric"]:hover,
+    .interactive-surface:hover,
     .panel-card:hover,
     .insight-card:hover,
     .timeline-card:hover,
@@ -516,8 +638,8 @@ def load_css():
     .result-card:hover,
     .resource-card:hover {
         transform: translateY(-2px);
-        border-color: rgba(62, 139, 255, 0.34) !important;
-        box-shadow: var(--shadow) !important;
+        border-color: rgba(62, 139, 255, 0.38) !important;
+        box-shadow: var(--shadow-hover) !important;
     }
 
     .metric-item { margin-bottom: 0; }
@@ -721,10 +843,10 @@ def load_css():
         border: 1px solid var(--line) !important;
         box-shadow: none !important;
         transition:
-            transform 140ms var(--ease-out),
-            background 140ms var(--ease-out),
-            border-color 140ms var(--ease-out),
-            box-shadow 140ms var(--ease-out) !important;
+            transform var(--dur-fast) var(--ease-emphasized),
+            background var(--dur-fast) var(--ease-out),
+            border-color var(--dur-fast) var(--ease-out),
+            box-shadow var(--dur-fast) var(--ease-out) !important;
         min-height: 44px !important;
     }
 
@@ -734,8 +856,8 @@ def load_css():
     .stButton button:focus,
     .stButton button:focus-visible {
         outline: none !important;
-        box-shadow: 0 0 0 3px rgba(62, 139, 255, 0.18) !important;
-        border-color: rgba(62, 139, 255, 0.34) !important;
+        box-shadow: var(--shadow-focus) !important;
+        border-color: rgba(62, 139, 255, 0.38) !important;
     }
 
     .stButton button[kind="primary"] {
@@ -793,6 +915,27 @@ def load_css():
         background: rgba(62, 139, 255, 0.14) !important;
         color: #DDEBFF !important;
         border-color: rgba(62, 139, 255, 0.32) !important;
+        box-shadow: var(--glow-primary) !important;
+    }
+
+    .search-tag-scope .stButton button:active {
+        transform: translateY(0) scale(0.98);
+    }
+
+    .choice-matrix .stCheckbox,
+    .preference-grid .stCheckbox {
+        padding: 0.48rem 0.56rem;
+        border-radius: 14px;
+        border: 1px solid rgba(148, 175, 206, 0.12);
+        background: rgba(255, 255, 255, 0.025);
+        transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+    }
+
+    .choice-matrix .stCheckbox:hover,
+    .preference-grid .stCheckbox:hover {
+        transform: translateY(-1px);
+        background: rgba(62, 139, 255, 0.08);
+        border-color: rgba(62, 139, 255, 0.24);
     }
 
     .insight-list {
@@ -887,6 +1030,13 @@ def load_css():
         color: var(--muted) !important;
         background: transparent !important;
         font-weight: 650 !important;
+        transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+    }
+
+    .stTabs [data-baseweb="tab"]:hover {
+        transform: translateY(-1px);
+        color: var(--ink) !important;
+        background: rgba(62, 139, 255, 0.08) !important;
     }
 
     .stTabs [aria-selected="true"] {

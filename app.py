@@ -30,6 +30,28 @@ render_header()
 # 初始化session
 init_session()
 
+# 获取 URL 参数中的页面
+try:
+    page_param = st.query_params.get("page", "")
+    page_map = {
+        "course": "课程地图",
+        "skill": "技能图谱",
+        "cert": "证书导航",
+        "job": "职业生态",
+        "roadmap": "成长路线",
+        "search": "智能搜索",
+        "课程地图": "课程地图",
+        "技能图谱": "技能图谱",
+        "证书导航": "证书导航",
+        "职业生态": "职业生态",
+        "成长路线": "成长路线",
+        "智能搜索": "智能搜索",
+    }
+    if page_param in page_map:
+        st.session_state.nav_selected = page_map[page_param]
+except Exception:
+    pass
+
 # 导航栏样式
 st.markdown("""
 <style>
@@ -44,13 +66,25 @@ st.markdown("""
     position: sticky;
     top: 0.6rem;
     z-index: 20;
-    padding: 0.8rem;
+    padding: 0.82rem;
     margin-bottom: 1.2rem;
-    border: 1px solid var(--line) !important;
+    border: 1px solid rgba(148, 175, 206, 0.22) !important;
     border-radius: var(--radius-lg) !important;
-    background: linear-gradient(180deg, rgba(12, 23, 39, 0.9) 0%, rgba(8, 16, 28, 0.92) 100%) !important;
-    box-shadow: var(--shadow-soft) !important;
-    backdrop-filter: blur(18px);
+    background:
+        linear-gradient(180deg, rgba(12, 23, 39, 0.9) 0%, rgba(8, 16, 28, 0.94) 100%),
+        radial-gradient(circle at 18% 0%, rgba(62, 139, 255, 0.14), transparent 34%) !important;
+    box-shadow: var(--shadow-soft), 0 0 0 1px rgba(255,255,255,0.02) inset !important;
+    backdrop-filter: blur(22px) saturate(140%);
+    overflow: hidden;
+}
+
+.top-nav::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(125, 226, 209, 0.45), rgba(62, 139, 255, 0.5), transparent);
+    pointer-events: none;
 }
 
 .top-nav-shell {
@@ -83,14 +117,15 @@ st.markdown("""
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    padding: 0.42rem 0.72rem;
+    padding: 0.46rem 0.82rem;
     border-radius: 999px;
-    background: rgba(62, 139, 255, 0.12);
-    border: 1px solid rgba(62, 139, 255, 0.2);
-    color: #A9CAFF !important;
+    background: linear-gradient(135deg, rgba(62, 139, 255, 0.18), rgba(125, 226, 209, 0.08));
+    border: 1px solid rgba(62, 139, 255, 0.26);
+    color: #DDEBFF !important;
     font-size: 0.76rem;
-    font-weight: 700;
+    font-weight: 760;
     white-space: nowrap;
+    box-shadow: inset 0 0 18px rgba(62, 139, 255, 0.08), var(--glow-primary);
 }
 
 .top-nav .stButton {
@@ -98,7 +133,12 @@ st.markdown("""
 }
 
 .top-nav .stButton button {
-    transition: all 160ms var(--ease-out) !important;
+    transition:
+        transform var(--dur-fast) var(--ease-emphasized),
+        background var(--dur-fast) var(--ease-out),
+        border-color var(--dur-fast) var(--ease-out),
+        box-shadow var(--dur-fast) var(--ease-out),
+        color var(--dur-fast) var(--ease-out) !important;
     border-radius: 14px !important;
     font-weight: 650 !important;
     font-size: 0.92rem !important;
@@ -109,16 +149,22 @@ st.markdown("""
 }
 
 .top-nav .stButton button[kind="primary"] {
-    background: linear-gradient(135deg, rgba(62, 139, 255, 0.2) 0%, rgba(62, 139, 255, 0.12) 100%) !important;
+    background:
+        linear-gradient(135deg, rgba(62, 139, 255, 0.24) 0%, rgba(125, 226, 209, 0.1) 100%) !important;
     color: #F7FBFF !important;
-    border-color: rgba(62, 139, 255, 0.32) !important;
-    box-shadow: inset 0 0 0 1px rgba(62, 139, 255, 0.12), 0 14px 28px rgba(18, 42, 82, 0.24) !important;
+    border-color: rgba(62, 139, 255, 0.42) !important;
+    box-shadow: inset 0 0 0 1px rgba(125, 226, 209, 0.08), inset 0 -18px 36px rgba(62, 139, 255, 0.07), var(--glow-primary) !important;
 }
 
 .top-nav .stButton button[kind="primary"]:hover {
-    background: linear-gradient(135deg, rgba(62, 139, 255, 0.26) 0%, rgba(62, 139, 255, 0.16) 100%) !important;
+    background: linear-gradient(135deg, rgba(62, 139, 255, 0.3) 0%, rgba(125, 226, 209, 0.14) 100%) !important;
     color: #FFFFFF !important;
     transform: translateY(-1px);
+    border-color: rgba(125, 226, 209, 0.42) !important;
+}
+
+.top-nav .stButton button:active {
+    transform: translateY(0) scale(0.985) !important;
 }
 
 .top-nav .stButton button[kind="secondary"] {
@@ -180,21 +226,12 @@ for idx, option in enumerate(nav_options):
         ):
             if st.session_state.nav_selected != option["name"]:
                 st.session_state.nav_selected = option["name"]
+                st.query_params["page"] = option["page_key"]
                 st.session_state.selected_job = None
                 st.session_state.selected_cert = None
                 st.rerun()
 
 st.markdown('</div></div>', unsafe_allow_html=True)
-
-# 获取 URL 参数中的页面
-try:
-    query_params = st.query_params
-    page_param = query_params.get("page", "")
-    valid_pages = ["课程地图", "技能图谱", "证书导航", "职业生态", "成长路线", "智能搜索"]
-    if page_param in valid_pages:
-        st.session_state.nav_selected = page_param
-except:
-    pass
 
 page = st.session_state.nav_selected
 

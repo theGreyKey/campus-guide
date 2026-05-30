@@ -35,7 +35,7 @@ def render():
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown('<div class="form-shell">', unsafe_allow_html=True)
+    st.markdown('<div class="form-shell form-panel content-fade">', unsafe_allow_html=True)
     st.markdown("""
     <div class="section-header">
         <div class="section-kicker">Planner input</div>
@@ -47,16 +47,20 @@ def render():
     col1, col2 = st.columns(2)
 
     with col1:
+        st.markdown('<div class="interactive-surface" style="padding:1rem;">', unsafe_allow_html=True)
         st.markdown('<div class="eyebrow-text" style="margin-bottom:0.5rem;">目标与能力</div>', unsafe_allow_html=True)
         career_goal = st.selectbox("职业目标", ["量化交易", "风险管理", "金融产品", "AI开发", "数据分析", "不确定"])
         math_level = st.select_slider("数学能力", ["较弱", "一般", "较强", "很强"])
         prog_level = st.select_slider("编程能力", ["无基础", "基础", "熟练", "精通"])
+        st.markdown('</div>', unsafe_allow_html=True)
 
     with col2:
+        st.markdown('<div class="interactive-surface" style="padding:1rem;">', unsafe_allow_html=True)
         st.markdown('<div class="eyebrow-text" style="margin-bottom:0.5rem;">时间与偏好</div>', unsafe_allow_html=True)
         available_time = st.select_slider("每周可投入时间", ["<5小时", "5-10小时", "10-20小时", ">20小时"])
         target_time = st.selectbox("目标考证时间", ["3个月内", "6个月内", "1年内", "2年内"])
         preferred_industry = st.multiselect("偏好行业", ["银行", "证券/基金", "保险", "互联网金融", "金融科技公司", "咨询"])
+        st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown("""
     <div class="section-header" style="margin-top:0.4rem;">
@@ -64,6 +68,7 @@ def render():
         <p class="section-caption">可多选，用于微调方向与建议内容。</p>
     </div>
     """, unsafe_allow_html=True)
+    st.markdown('<div class="choice-matrix preference-grid">', unsafe_allow_html=True)
     personality_cols = st.columns(4)
     personality_options = ["喜欢钻研", "喜欢与人沟通", "追求稳定", "喜欢挑战", "注重细节", "有创造力", "逻辑性强", "抗压能力强"]
     selected_personality = []
@@ -72,6 +77,7 @@ def render():
         with personality_cols[idx % 4]:
             if st.checkbox(opt, key=f"person_{idx}"):
                 selected_personality.append(opt)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     generate_btn = st.button("生成我的成长路线", use_container_width=True, type="primary")
     st.markdown('</div>', unsafe_allow_html=True)
@@ -116,6 +122,20 @@ def render():
             certs = certs[:1]
         elif target_time == "6个月内":
             certs = certs[:2]
+
+        st.markdown('<div class="roadmap-board content-fade">', unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class="roadmap-summary">
+            <div class="card-title-row">
+                <div>
+                    <div class="section-kicker">Roadmap generated</div>
+                    <div class="section-title">{direction_name}</div>
+                </div>
+                <span class="tag tag-success">{target_time}</span>
+            </div>
+            <div class="card-caption">系统已基于职业目标、能力基础、时间窗口和偏好标签生成阶段化路线。</div>
+        </div>
+        """, unsafe_allow_html=True)
 
         st.markdown(f"""
         <div class="metric-strip">
@@ -248,6 +268,8 @@ def render():
                 </div>
                 """, unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
+
+        st.markdown('</div>', unsafe_allow_html=True)
 
     elif generate_btn:
         st.warning("请填写完整信息")
