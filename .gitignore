@@ -17,9 +17,10 @@ dist/
 .streamlit/secrets.toml
 
 # IDE/editor metadata
-.vscode/
-.idea/
-.devcontainer/
+vscode/
+idea/
+devcontainer/
+claude/
 AGENTS.md
 
 # OS files
