@@ -19,6 +19,8 @@ dist/
 # IDE/editor metadata
 .vscode/
 .idea/
+.devcontainer/
+AGENTS.md
 
 # OS files
 .DS_Store
